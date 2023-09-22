@@ -20,21 +20,9 @@ for blobname in bloblist:
 
     lfile = blobname.replace('.wav','-service.json')
     rfile = blobname.replace('.wav','-caller.json')
-    leftcommand = subprocess.Popen(['python', 'left.wav', 'lefttranscript.json'])
-    rightcommand = subprocess.Popen(['python', 'right.wav', 'righttranscript.json'])
+    leftcommand = subprocess.Popen(['python', 'subp.py', 'left.wav', 'lefttranscript.json'])
+    rightcommand = subprocess.Popen(['python', 'subp.py', 'right.wav', 'righttranscript.json'])
 
-
-    #result = model.transcribe("left.wav")
-    
-    #with open('lefttranscript.json', "w") as f:
-    #    json.dump(result["segments"], f, indent = 4)
-
-    
-
-    #result = model.transcribe("right.wav")
-    
-    #with open('righttranscript.json', "w") as f:
-    #    json.dump(result["segments"], f, indent = 4)
     leftcommand.wait()
     rightcommand.wait()
 
