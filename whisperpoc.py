@@ -20,8 +20,8 @@ for blobname in bloblist:
 
     lfile = blobname.replace('.wav','-service.json')
     rfile = blobname.replace('.wav','-caller.json')
-    leftcommand = subprocess.Popen(['python', 'subp.py', 'left.wav', 'lefttranscript.json'])
-    rightcommand = subprocess.Popen(['python', 'subp.py', 'right.wav', 'righttranscript.json'])
+    leftcommand = subprocess.Popen(['python3', 'subp.py', 'left.wav', 'lefttranscript.json'])
+    rightcommand = subprocess.Popen(['python3', 'subp.py', 'right.wav', 'righttranscript.json'])
 
     leftcommand.wait()
     rightcommand.wait()
