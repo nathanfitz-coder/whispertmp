@@ -1,7 +1,7 @@
-import whisper, json, os, time
+import json, os, time, subprocess
 from azureutils import BlobUtil
 
-model = whisper.load_model("medium")
+#model = whisper.load_model("medium")
 
 bloblist = ['08A3C1EB11BD4F96B16829A326E911D2.wav',
             '3F49355EEB0141619303CD4500DFD62D.wav',
@@ -18,18 +18,27 @@ for blobname in bloblist:
     ffmpegcmd = "ffmpeg -y -i transcribeme.wav -map_channel 0.0.0 left.wav -map_channel 0.0.1 right.wav"
     os.system(ffmpegcmd)
 
-    result = model.transcribe("left.wav")
     lfile = blobname.replace('.wav','-service.json')
-    with open('lefttranscript.json', "w") as f:
-        json.dump(result["segments"], f, indent = 4)
+    rfile = blobname.replace('.wav','-caller.json')
+    leftcommand = subprocess.Popen(['python', 'left.wav', 'lefttranscript.json'])
+    rightcommand = subprocess.Popen(['python', 'right.wav', 'righttranscript.json'])
+
+
+    #result = model.transcribe("left.wav")
+    
+    #with open('lefttranscript.json', "w") as f:
+    #    json.dump(result["segments"], f, indent = 4)
+
+    
+
+    #result = model.transcribe("right.wav")
+    
+    #with open('righttranscript.json', "w") as f:
+    #    json.dump(result["segments"], f, indent = 4)
+    leftcommand.wait()
+    rightcommand.wait()
 
     bu.upload_binary_blob(f'transcribe/{lfile}','lefttranscript.json')
-
-    result = model.transcribe("right.wav")
-    rfile = blobname.replace('.wav','-caller.json')
-    with open('righttranscript.json', "w") as f:
-        json.dump(result["segments"], f, indent = 4)
-
     bu.upload_binary_blob(f'transcribe/{rfile}','righttranscript.json')
 
 t1 = time.time()
